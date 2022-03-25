@@ -11,19 +11,47 @@
 
 </body>
 <script>
-    const countTree = 50;
-    let treePaint = ''
-    for (let i = 0;i<countTree;i++){
-
-        for (let i2 = 0;i2<countTree;i2++){
-            if (i2>=25-i && i2<= 25+i){
-                treePaint += '*'
-            }else {
-                treePaint +='_'
+    let user = {
+        name: "Иван",
+        age: 30,
+        company:{
+            salary :1000,
+            people:100,
+            country:'UA'
+        },
+        street:'Родимцева',
+        summary:{
+            street:'Kiev',
+            skills:{
+                js:'90%',
+                php:'50%',
+                jsik:{
+                    test:'1',
+                    test2:'2'
+                }
             }
         }
-        treePaint += '\n'
+    };
+
+    let clone = {}; // новый пустой объект
+
+    function cloneObject(user) {
+        if(typeof user !== "string") {
+            for (let key in user) {
+                clone[key] = user[key];
+
+                if (typeof user[key] === 'object') {
+
+                    cloneObject(key)
+                }
+
+            }
+        }
     }
-    console.log(treePaint)
+    cloneObject(user)
+    user.name = 'tst'
+    console.log(clone)
+    console.log(user)
+
 </script>
 </html>
