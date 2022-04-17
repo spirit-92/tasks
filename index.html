@@ -1,29 +1,154 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta charset="utf-8">
+    <style>
+        .circle {
+            transition-property: width, height;
+            transition-duration: 2s;
+            position: fixed;
+            transform: translateX(-50%) translateY(-50%);
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .form_git {
+
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: chartreuse;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .placeholder {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #container__loader {
+            display: contents;
+            visibility: hidden;
+        }
+    </style>
 </head>
+
 <body>
+<div class="cardUser">
+    <div id="nameUser"></div>
+    <div id="imgUser"></div>
+</div>
+<form id="form_name" class="form_git">
+    <label>
+        <span>Имя</span>
+        <input name="nameGit" id="nameGit" type="text">
+    </label>
+
+    <button type="submit">show info git</button>
+</form>
+<div id="container__loader">
+    <div class="placeholder">
+        <img src="img/loader.gif" alt="">
+    </div>
+</div>
+<script>
+
+    let userName;
+
+    document.getElementById('form_name').addEventListener('submit', function (e) {
+        e.preventDefault()
+        let form = document.getElementById('form_name').elements
+        let obj = {};
+
+        for (let i = 0; i < form.length; i++) {
+            let item = form.item(i);
+            if (item.value) obj[item.name] = item.value;
+        }
+        if (obj.nameGit) {
+            let userInf = new UserInfo(obj.nameGit)
+
+        }
+
+    })
+
+    class UserInfo {
+        constructor(name) {
+            this.name = name;
+            this.loader = document.getElementById('container__loader')
+            this.loader.style.visibility = 'visible'
+            this.getInfoUser()
+        }
+
+        getInfoUser() {
+            this.info = fetch(`https://api.github.com/users/${this.name}`)
+            this.getPromise()
+
+        }
+
+        getPromise() {
+            this.info
+                .then(res => res.json())
+                .then(res => {
+
+                    return this.getImgUser(res)
+                })
+                .then(res => {
+
+                  return  this.getNameUser(res)
+                })
+        }
+
+        getImgUser(user) {
+            let This = this
+            return new Promise(function (resolve, reject) {
+                let imgContainer = document.getElementById('imgUser')
+                let imgUser = document.getElementById('imgUsers')
+                if (imgUser) document.getElementById('imgUsers').remove()
+                let img = document.createElement('img')
+                img.src = user.avatar_url
+                img.id = 'imgUsers'
+                imgContainer.append(img)
+                img.onload  =function(){
+
+                    This.loader.style.visibility = 'hidden'
+                    resolve(user)
+                }
+
+
+
+            })
+        }
+        getNameUser(user){
+            let This = this
+            return new Promise(function (resolve, reject) {
+                let nameContainer = document.getElementById('nameUser')
+                let nameUser = document.getElementById('NameUsers')
+                if (nameUser) document.getElementById('NameUsers').remove()
+                let p = document.createElement('h1')
+                p.innerText = user.name
+                p.id = 'NameUsers'
+                nameContainer.append(p)
+                // This.loader.style.visibility = 'hidden'
+                resolve(user)
+            })
+        }
+    }
+
+
+</script>
+
 
 </body>
-<script>
-    const countTree = 50;
-    let treePaint = ''
-    for (let i = 0;i<countTree;i++){
 
-        for (let i2 = 0;i2<countTree;i2++){
-            if (i2>=25-i && i2<= 25+i){
-                treePaint += '*'
-            }else {
-                treePaint +='_'
-            }
-        }
-        treePaint += '\n'
-    }
-    console.log(treePaint)
-</script>
 </html>
