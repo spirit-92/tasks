@@ -11,19 +11,37 @@
 
 </body>
 <script>
-    const countTree = 50;
-    let treePaint = ''
-    for (let i = 0;i<countTree;i++){
+    let data = {
+        "Рыбы": {
+            "форель": {},
+            "лосось": {}
+        },
 
-        for (let i2 = 0;i2<countTree;i2++){
-            if (i2>=25-i && i2<= 25+i){
-                treePaint += '*'
-            }else {
-                treePaint +='_'
+        "Деревья": {
+            "Огромные": {
+                "секвойя": {},
+                "дуб": {}
+            },
+            "Цветковые": {
+                "яблоня": {},
+                "магнолия": {}
             }
         }
-        treePaint += '\n'
+    };
+    function createTree(container, data) {
+        let ul = document.createElement('ul')
+
+        for (let obj in data){
+            console.log(obj)
+            if ( typeof  obj ==='object'){
+                createTree(container,obj)
+            }
+        }
+
     }
-    console.log(treePaint)
+
+    let container = document.getElementById('container');
+    createTree(container, data); // создаёт дерево в контейнере
+
 </script>
 </html>;
