@@ -13,6 +13,7 @@
 <script>
     let user = {
         name: "Иван",
+        name2:{},
         age: 30,
         company:{
             salary :1000,
@@ -36,20 +37,14 @@
     let clone = {}; // новый пустой объект
 
     function cloneObject(user) {
-        if(typeof user !== "string") {
-            for (let key in user) {
-                clone[key] = user[key];
-
-                if (typeof user[key] === 'object') {
-
-                    cloneObject(key)
-                }
-
-            }
+        for (let key in user) {
+            console.log(user[key])
+            clone[key] = user[key];
         }
+
     }
     cloneObject(user)
-    user.name = 'tst'
+    clone.name = '1'
     console.log(clone)
     console.log(user)
 
