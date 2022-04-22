@@ -31,34 +31,55 @@
         }
     };
 
-    function createTree(container, obj) {
-        container.append(createTreeDom(obj));
-    }
+    // function createTree(container, obj) {
+    //     container.append(createTreeDom(obj));
+    // }
+    //
+    // function createTreeDom(obj) {
+    //     // если нет дочерних элементов, то вызов возвращает undefined
+    //     // и элемент <ul> не будет создан
+    //     if (!Object.keys(obj).length) return;
+    //
+    //     let ul = document.createElement('ul');
+    //
+    //     for (let key in obj) {
+    //         let li = document.createElement('li');
+    //         li.innerHTML = key;
+    //
+    //         let childrenUl = createTreeDom(obj[key]);
+    //         if (childrenUl) {
+    //             li.append(childrenUl);
+    //         }
+    //
+    //         ul.append(li);
+    //     }
+    //
+    //     return ul;
+    // }
+    //
+    // let container = document.getElementById('container');
+    // createTree(container, data);
 
-    function createTreeDom(obj) {
-        // если нет дочерних элементов, то вызов возвращает undefined
-        // и элемент <ul> не будет создан
-        if (!Object.keys(obj).length) return;
+    function recursion(data) {
+        console.log(data)
+        if (!Object.keys(data).length) return;
+        let ul = document.createElement('ul')
 
-        let ul = document.createElement('ul');
-
-        for (let key in obj) {
-            let li = document.createElement('li');
-            li.innerHTML = key;
-
-            let childrenUl = createTreeDom(obj[key]);
-            if (childrenUl) {
-                li.append(childrenUl);
-            }
-
+        for (let key in data){
+            let li = document.createElement('li')
+            li.innerHTML = key
+            let childUl = recursion(data[key])
+            console.log(childUl,'rec')
+            if (childUl) li.append(childUl);
             ul.append(li);
         }
-
-        return ul;
+        return ul
     }
 
-    let container = document.getElementById('container');
-    createTree(container, data);
+  let tree =  recursion(data)
+
+    document.body.append(tree)
+
 </script>
 </body>
 
