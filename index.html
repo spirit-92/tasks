@@ -7,10 +7,81 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+<style>
+    .arrow {
+        padding: 0;
+        background: #ddd;
+        border-radius: 15px;
+        border: 1px solid gray;
+        font-size: 24px;
+        line-height: 24px;
+        color: #444;
+        display: block;
+    }
+
+    .arrow:focus {
+        outline: none;
+    }
+
+    .arrow:hover {
+        background: #ccc;
+        cursor: pointer;
+    }
+
+    ul {
+        height: 130px;
+        width: 9999px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 0;
+    }
+
+    ul img {
+        width: 130px;
+        height: 130px;
+        display: block; /* убираем пустое место вокруг картинок */
+    }
+
+    ul li {
+        display: inline-block; /* убираем пустое место между элементами списка */
+    }
+</style>
 <body>
 
-</body>
+<!-- создайте свою разметку со стилями -->
+
+<button class="arrow">⇦</button>
+<button class="arrow">⇨</button>
+
+
+<ul>
+    <li><img src="https://ru.js.cx/carousel/1.png"></li>
+    <li><img src="https://ru.js.cx/carousel/2.png"></li>
+    <li><img src="https://ru.js.cx/carousel/3.png"></li>
+    <li><img src="https://ru.js.cx/carousel/4.png"></li>
+    <li><img src="https://ru.js.cx/carousel/5.png"></li>
+    <li><img src="https://ru.js.cx/carousel/6.png"></li>
+    <li><img src="https://ru.js.cx/carousel/7.png"></li>
+    <li><img src="https://ru.js.cx/carousel/8.png"></li>
+    <li><img src="https://ru.js.cx/carousel/9.png"></li>
+    <li><img src="https://ru.js.cx/carousel/10.png"></li>
+</ul>
+
+
 <script>
 
+    let img = document.querySelectorAll('img')
+
+
+         img.forEach((item, index) => {
+
+
+         })
+
+
+
 </script>
+
+</body>
 </html>
