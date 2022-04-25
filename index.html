@@ -46,16 +46,52 @@
     ul li {
         display: inline-block; /* убираем пустое место между элементами списка */
     }
+    .container-slide{
+        transition: .8s;
+        /*width: 400px;*/
+    }
+    .container{
+        overflow-x: clip;
+
+    }
+    .arrow{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .arrow-left{
+        left: 0;
+    }
+    .arrow-right{
+        right: 0;
+    }
+    .slider{
+        background: #eee;
+        padding: 33px 54px;
+        display: inline-block;
+        border-radius: 15px;
+        border: 1px solid #CCC;
+        position: relative;
+    }
+    body{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 50px;
+
+    }
 </style>
 <body>
 
 <!-- создайте свою разметку со стилями -->
 
-<button class="arrow">⇦</button>
-<button class="arrow">⇨</button>
 
+<div class="slider">
+    <button id="left" class="arrow arrow-left">⇦</button>
+    <button id="right" class="arrow arrow-right">⇨</button>
+<div class="container">
 
-<ul>
+<ul class="container-slide">
     <li><img src="https://ru.js.cx/carousel/1.png"></li>
     <li><img src="https://ru.js.cx/carousel/2.png"></li>
     <li><img src="https://ru.js.cx/carousel/3.png"></li>
@@ -68,18 +104,73 @@
     <li><img src="https://ru.js.cx/carousel/10.png"></li>
 </ul>
 
-
+</div>
+</div>
 <script>
 
     let img = document.querySelectorAll('img')
+    new Promise(resolve => {
+        let count = 0
+        img.forEach((item) =>{
+
+            item.onload = function () {
+                count++
+                 let width = item.getBoundingClientRect()
+
+                if (img.length === count){
+                  resolve(width.width)
+              }
+            }
+        })
+    }).then(item =>{
+
+        renderSlide(item)
+    })
+
+    function renderSlide(widthImg) {
+        document.querySelector('.container').style.width = widthImg*3+'px'
+
+    }
+    let slideRight = document.querySelector('#right')
+    let slideLeft= document.querySelector('#left')
+    let containerSlide = document.querySelector('.container-slide')
+    slideRight.addEventListener('click',translateAnimationRight)
+    slideLeft.addEventListener('click',translateAnimationLeft)
+
+    function translateAnimationLeft(){
+        let oldTr = getTranslateX() + 390
+        if ( oldTr <= 0){
+            containerSlide.style.transform =  `translateX(${oldTr}px)`
+            containerSlide.addEventListener('transitionrun',function (e) {
+                slideLeft.removeEventListener("click", translateAnimationLeft);
+            })
+            containerSlide.addEventListener('transitionend',function (e) {
+                slideLeft.addEventListener("click", translateAnimationLeft);
+            })
+
+        }
+    }
+
+     function translateAnimationRight(){
+         let oldTr = getTranslateX() - 390
+         if ( oldTr > -1300){
+             containerSlide.style.transform =  `translateX(${oldTr}px)`
+             containerSlide.addEventListener('transitionrun',function (e) {
+                 slideRight.removeEventListener("click", translateAnimationRight);
+             })
+             containerSlide.addEventListener('transitionend',function (e) {
+                 slideRight.addEventListener("click", translateAnimationRight);
+             })
+
+         }
+     }
 
 
-         img.forEach((item, index) => {
-
-
-         })
-
-
+    function getTranslateX() {
+        var style = window.getComputedStyle(containerSlide);
+        var matrix = new WebKitCSSMatrix(style.transform);
+            return matrix.m41
+    }
 
 </script>
 
