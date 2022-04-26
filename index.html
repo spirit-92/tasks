@@ -6,15 +6,105 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 4px;
+        }
+        th {
+            cursor: pointer;
+        }
+        th:hover {
+            background: yellow;
+        }
+    </style>
 </head>
 <body>
 
-
-<div id="container"></div>
+<table id="grid">
+    <thead>
+    <tr>
+        <th data-type="number">Возраст</th>
+        <th data-type="string">Имя</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>5</td>
+        <td>Вася</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Петя</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>Женя</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>Маша</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Илья</td>
+    </tr>
+    </tbody>
+</table>
 
 <script>
+ class Sort{
+     constructor(elem) {
+         this._elem = elem
+         elem.onclick= this.onClick.bind(this)
+     }
+     string(event){
+         let trs =  document.querySelectorAll('tbody tr')
+         let divsArr = Array.from(trs);
+         divsArr.sort(function (item1,item2) {
 
+             if ( item1.lastElementChild.textContent < item2.lastElementChild.textContent ){
+                 return -1;
+             }
+             if ( item1.lastElementChild.textContent> item2.lastElementChild.textContent  ){
+                 return 1;
+             }
+             return 0;
+
+         })
+
+         let tabBody = document.querySelector('tbody')
+         tabBody.innerHTML = ''
+         divsArr.forEach(item =>{
+             tabBody.append(item)
+         })
+     }
+     number(event){
+
+       let trs =  document.querySelectorAll('tbody tr')
+         let divsArr = Array.from(trs);
+          divsArr.sort(function (item1,item2) {
+                return +item1.firstElementChild.textContent - +item2.firstElementChild.textContent
+        })
+         let tabBody = document.querySelector('tbody')
+         tabBody.innerHTML = ''
+         divsArr.forEach(item =>{
+             tabBody.append(item)
+         })
+
+     }
+
+     onClick(event){
+          let _methods = Object.getOwnPropertyNames(test.__proto__)
+          if(_methods.includes(event.target.dataset.type)) this[event.target.dataset.type](event.target)
+     }
+ }
+ let test = new Sort(grid)
 </script>
+
 </body>
 
 </html>;
