@@ -1,110 +1,80 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta charset="utf-8">
     <style>
-        table {
-            border-collapse: collapse;
+        body {
+            height: 2000px;
+            /* добавим body прокрутку, подсказка должна работать и с прокруткой */
         }
-        th, td {
-            border: 1px solid black;
-            padding: 4px;
-        }
-        th {
-            cursor: pointer;
-        }
-        th:hover {
-            background: yellow;
+
+        .tooltip {
+            position: fixed;
+            padding: 10px 20px;
+            border: 1px solid #b3c9ce;
+            border-radius: 4px;
+            text-align: center;
+            font: italic 14px/1.3 sans-serif;
+            color: #333;
+            background: #fff;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
         }
     </style>
 </head>
+
 <body>
 
-<table id="grid">
-    <thead>
-    <tr>
-        <th data-type="number">Возраст</th>
-        <th data-type="string">Имя</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>5</td>
-        <td>Вася</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Петя</td>
-    </tr>
-    <tr>
-        <td>12</td>
-        <td>Женя</td>
-    </tr>
-    <tr>
-        <td>9</td>
-        <td>Маша</td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>Илья</td>
-    </tr>
-    </tbody>
-</table>
+<p>ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя</p>
+<p>ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя ЛяЛяЛя</p>
+
+<button data-tooltip="эта подсказка должна быть длиннее, чем элемент">Короткая кнопка</button>
+<button data-tooltip="HTML<br>подсказка">Ещё кнопка</button>
+
+<p>Прокрутите страницу, чтобы кнопки оказались у верхнего края, а затем проверьте, правильно ли выводятся подсказки.</p>
+
 
 <script>
- class Sort{
-     constructor(elem) {
-         this._elem = elem
-         elem.onclick= this.onClick.bind(this)
-     }
-     string(event){
-         let trs =  document.querySelectorAll('tbody tr')
-         let divsArr = Array.from(trs);
-         divsArr.sort(function (item1,item2) {
+    let tooltipElem;
 
-             if ( item1.lastElementChild.textContent < item2.lastElementChild.textContent ){
-                 return -1;
-             }
-             if ( item1.lastElementChild.textContent> item2.lastElementChild.textContent  ){
-                 return 1;
-             }
-             return 0;
+    document.onmouseover = function(event) {
+        let target = event.target;
 
-         })
+        // если у нас есть подсказка...
+        let tooltipHtml = target.dataset.tooltip;
+        if (!tooltipHtml) return;
 
-         let tabBody = document.querySelector('tbody')
-         tabBody.innerHTML = ''
-         divsArr.forEach(item =>{
-             tabBody.append(item)
-         })
-     }
-     number(event){
+        // ...создадим элемент для подсказки
 
-       let trs =  document.querySelectorAll('tbody tr')
-         let divsArr = Array.from(trs);
-          divsArr.sort(function (item1,item2) {
-                return +item1.firstElementChild.textContent - +item2.firstElementChild.textContent
-        })
-         let tabBody = document.querySelector('tbody')
-         tabBody.innerHTML = ''
-         divsArr.forEach(item =>{
-             tabBody.append(item)
-         })
+        tooltipElem = document.createElement('div');
+        tooltipElem.className = 'tooltip';
+        tooltipElem.innerHTML = tooltipHtml;
+        document.body.append(tooltipElem);
 
-     }
+        // спозиционируем его сверху от аннотируемого элемента (top-center)
+        let coords = target.getBoundingClientRect();
 
-     onClick(event){
-          let _methods = Object.getOwnPropertyNames(test.__proto__)
-          if(_methods.includes(event.target.dataset.type)) this[event.target.dataset.type](event.target)
-     }
- }
- let test = new Sort(grid)
+        let left = coords.left + (target.offsetWidth - tooltipElem.offsetWidth) / 2;
+        if (left < 0) left = 0; // не заезжать за левый край окна
+
+        let top = coords.top - tooltipElem.offsetHeight - 5;
+        if (top < 0) { // если подсказка не помещается сверху, то отображать её снизу
+            top = coords.top + target.offsetHeight + 5;
+        }
+
+        tooltipElem.style.left = left + 'px';
+        tooltipElem.style.top = top + 'px';
+    };
+
+    document.onmouseout = function(e) {
+
+        if (tooltipElem) {
+            tooltipElem.remove();
+            tooltipElem = null;
+        }
+
+    };
 </script>
 
 </body>
-
-</html>;
+</html>
