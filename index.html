@@ -7,51 +7,43 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<body>
 
-</body>
-<script>
-    let user = {
-        name: "Иван",
-        age: 30,
-        company:{
-            salary :1000,
-            people:100,
-            country:'UA'
-        },
-        street:'Родимцева',
-        summary:{
-            street:'Kiev',
-            skills:{
-                js:'90%',
-                php:'50%',
-                jsik:{
-                    test:'1',
-                    test2:'2'
-                }
-            }
-        }
-    };
 
-    let clone = {}; // новый пустой объект
-
-    function cloneObject(user) {
-        if(typeof user !== "string") {
-            for (let key in user) {
-                clone[key] = user[key];
-
-                if (typeof user[key] === 'object') {
-
-                    cloneObject(key)
-                }
-
-            }
+<script type="module">
+    let cashF = {
+        saveFi: function (a, b) {
+            return a + b
         }
     }
-    cloneObject(user)
-    user.name = 'tst'
-    console.log(clone)
-    console.log(user)
+    function decorate(f) {
+        let cash = new Map()
+
+        let funk =  function () {
+            let key  = arguments[0]+arguments[1]
+            funk.calling += 1
+            if (cash.has(key)){
+                console.log('CASSHH')
+                return cash.get(key)
+
+            }
+            cash.set(key,f.apply(this,arguments))
+            return cash.get(key)
+
+        }
+
+        funk.calling = 0;
+        return funk
+
+    }
+     cashF.saveFi = decorate(cashF.saveFi)
+    console.log(cashF.saveFi(2,2))
+    console.log(cashF.saveFi(2,2))
+    console.log(cashF.saveFi(2,3))
+    console.log(cashF.saveFi(2,3))
+    console.log(cashF.saveFi.calling,'CALLING')
+
 
 </script>
-</html>
+
+</html>;
+
