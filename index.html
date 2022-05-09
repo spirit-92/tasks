@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 
+
 <script type="module">
     let cashF = {
         saveFi: function (a, b) {
@@ -23,11 +24,13 @@
             if (cash.has(key)){
                 console.log('CASSHH')
                 return cash.get(key)
+
             }
             cash.set(key,f.apply(this,arguments))
             return cash.get(key)
 
         }
+
         funk.calling = 0;
         return funk
 
@@ -38,6 +41,8 @@
     console.log(cashF.saveFi(2,3))
     console.log(cashF.saveFi(2,3))
     console.log(cashF.saveFi.calling,'CALLING')
+
+
 </script>
 
 </html>;
