@@ -7,8 +7,38 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<body>
-<h1>first task</h1>
-</body>
 
-</html>
+<script type="module">
+    let cashF = {
+        saveFi: function (a, b) {
+            return a + b
+        }
+    }
+    function decorate(f) {
+        let cash = new Map()
+
+        let funk =  function () {
+            let key  = arguments[0]+arguments[1]
+            funk.calling += 1
+            if (cash.has(key)){
+                console.log('CASSHH')
+                return cash.get(key)
+            }
+            cash.set(key,f.apply(this,arguments))
+            return cash.get(key)
+
+        }
+        funk.calling = 0;
+        return funk
+
+    }
+     cashF.saveFi = decorate(cashF.saveFi)
+    console.log(cashF.saveFi(2,2))
+    console.log(cashF.saveFi(2,2))
+    console.log(cashF.saveFi(2,3))
+    console.log(cashF.saveFi(2,3))
+    console.log(cashF.saveFi.calling,'CALLING')
+</script>
+
+</html>;
+
