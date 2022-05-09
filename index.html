@@ -8,39 +8,22 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Te dsy </h1>
+
 </body>
+<script>
+    const countTree = 50;
+    let treePaint = ''
+    for (let i = 0;i<countTree;i++){
 
-<script type="module">
-    let cashF = {
-        saveFi: function (a, b) {
-            return a + b
-        }
-    }
-    function decorate(f) {
-        let cash = new Map()
-
-        let funk =  function () {
-            let key  = arguments[0]+arguments[1]
-            funk.calling += 1
-            if (cash.has(key)){
-                console.log('CASSHH')
-                return cash.get(key)
+        for (let i2 = 0;i2<countTree;i2++){
+            if (i2>=25-i && i2<= 25+i){
+                treePaint += '*'
+            }else {
+                treePaint +='_'
             }
-            cash.set(key,f.apply(this,arguments))
-            return cash.get(key)
-
         }
-        funk.calling = 0;
-        return funk
-
+        treePaint += '\n'
     }
-     cashF.saveFi = decorate(cashF.saveFi)
-    console.log(cashF.saveFi(2,2))
-    console.log(cashF.saveFi(2,2))
-    console.log(cashF.saveFi(2,3))
-    console.log(cashF.saveFi(2,3))
-    console.log(cashF.saveFi.calling,'CALLING')
+    console.log(treePaint)
 </script>
-
-</html>;
+</html>
