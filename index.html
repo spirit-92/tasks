@@ -1,44 +1,61 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta charset="utf-8">
+    <style>
+        .selected {
+            background: #0f0;
+        }
+
+        li {
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            /*-webkit-user-select: none;*/
+            /*!* user-select -- это нестандартное свойство *!*/
+
+            /*-moz-user-select: none;*/
+            /*!* поэтому нужны префиксы *!*/
+
+            /*-ms-user-select: none;*/
+        }
+    </style>
 </head>
 
-<script type="module">
-    let cashF = {
-        saveFi: function (a, b) {
-            return a + b
-        }
-    }
-    function decorate(f) {
-        let cash = new Map()
+<body>
 
-        let funk =  function () {
-            let key  = arguments[0]+arguments[1]
-            funk.calling += 1
-            if (cash.has(key)){
-                console.log('CASSHH')
-                return cash.get(key)
+Кликни на элемент списка, чтобы выделить его.
+<br>
+
+<ul onmousedown = 'return false' id="ul">
+    <li>Кристофер Робин</li>
+    <li>Винни Пух</li>
+    <li>Тигра</li>
+    <li>Кенга</li>
+    <li>Кролик. Просто Кролик.</li>
+</ul>
+
+<script>
+
+
+    ul.addEventListener('click',function (e) {
+        e.preventDefault()
+        if (e.target.tagName === 'LI'){
+
+            if (!(e.metaKey || e.ctrlKey)){
+                document.querySelectorAll('li').forEach(li =>{
+                    li.classList.remove('selected')
+                })
             }
-            cash.set(key,f.apply(this,arguments))
-            return cash.get(key)
+
+            e.target.classList.add('selected')
 
         }
-        funk.calling = 0;
-        return funk
 
-    }
-     cashF.saveFi = decorate(cashF.saveFi)
-    console.log(cashF.saveFi(2,2))
-    console.log(cashF.saveFi(2,2))
-    console.log(cashF.saveFi(2,3))
-    console.log(cashF.saveFi(2,3))
-    console.log(cashF.saveFi.calling,'CALLING')
+    })
+
 </script>
 
-</html>;
-
+</body>
+</html>
