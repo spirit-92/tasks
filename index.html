@@ -1,76 +1,45 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-
-<head>
-    <meta charset="utf-8">
-
-</head>
-<style>
-    .slider {
-        border-radius: 5px;
-        background: #E0E0E0;
-        background: linear-gradient(left top, #E0E0E0, #EEEEEE);
-        width: 310px;
-        height: 15px;
-        margin: 5px;
-    }
-
-    .thumb {
-        width: 10px;
-        height: 25px;
-        border-radius: 3px;
-        position: relative;
-        left: 10px;
-        top: -5px;
-        background: blue;
-        cursor: pointer;
-    }
-</style>
 <body>
 
-<div id="slider" class="slider">
-    <div class="thumb"></div>
-</div>
+<p>Нажмите "Q" и "W" вместе (язык значения не играет).</p>
 
 <script>
-    let thumb = slider.querySelector('.thumb');
+    function runOnKeys(func, ...codes) {
+        let pressed = new Set();
 
-    thumb.onmousedown = function(event) {
-        event.preventDefault(); // предотвратить запуск выделения (действие браузера)
+        document.addEventListener('keydown', function(event) {
+            pressed.add(event.code);
 
-        let shiftX = event.clientX - thumb.getBoundingClientRect().left;
-        // shiftY здесь не нужен, слайдер двигается только по горизонтали
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-
-        function onMouseMove(event) {
-            let newLeft = event.clientX - shiftX - slider.getBoundingClientRect().left;
-
-            // курсор вышел из слайдера => оставить бегунок в его границах.
-            if (newLeft < 0) {
-                newLeft = 0;
-            }
-            let rightEdge = slider.offsetWidth - thumb.offsetWidth;
-            if (newLeft > rightEdge) {
-                newLeft = rightEdge;
+            for (let code of codes) { // все ли клавиши из набора нажаты?
+                if (!pressed.has(code)) {
+                    return;
+                }
             }
 
-            thumb.style.left = newLeft + 'px';
-        }
+            // да, все
 
-        function onMouseUp() {
-            document.removeEventListener('mouseup', onMouseUp);
-            document.removeEventListener('mousemove', onMouseMove);
-        }
+            // во время показа alert, если посетитель отпустит клавиши - не возникнет keyup
+            // при этом JavaScript "пропустит" факт отпускания клавиш, а pressed[keyCode] останется true
+            // чтобы избежать "залипания" клавиши -- обнуляем статус всех клавиш, пусть нажимает всё заново
+            pressed.clear();
 
-    };
+            func();
+        });
 
-    thumb.ondragstart = function() {
-        return false;
-    };
+        document.addEventListener('keyup', function(event) {
+            pressed.delete(event.code);
+        });
 
+    }
+
+    runOnKeys(
+        () => alert("Привет!"),
+        "KeyQ",
+        "KeyW"
+    );
 </script>
 
 </body>
+
 </html>
