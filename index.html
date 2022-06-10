@@ -1,126 +1,59 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-
 <head>
     <meta charset="utf-8">
 </head>
-<style>
-    html,
-    body {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-    }
-
-    #prompt-form {
-        display: inline-block;
-        padding: 5px 5px 5px 70px;
-        width: 200px;
-        border: 1px solid black;
-        background: white url(https://en.js.cx/clipart/prompt.png) no-repeat left 5px;
-        vertical-align: middle;
-    }
-
-    #prompt-form-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 9999;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        background: rgba(0, 0, 0, .4);
-    }
-
-    #prompt-form-container:before {
-        display: inline-block;
-        height: 100%;
-        content: '';
-        vertical-align: middle;
-
-    }
-
-    #prompt-form input[name="text"] {
-        display: block;
-        margin: 5px;
-        width: 180px;
-    }
-
-    .hide {
-        display: none;
-    }
-
-    .show {
-        display: block;
-        background: rgba(0, 0, 0, .4);
-    }
-</style>
 <body>
 
-<h2>Кликните на кнопку ниже</h2>
-<input type="button" value="Кликните, чтобы увидеть форму" id="show-button">
-
-
-</body>
 <script>
-    let html = `<div id="prompt-form-container">
-    <form id="prompt-form">
-        <div id="prompt-message">Введите что-нибудь...
-            <br>Пожалуйста..</div>
-        <input  name="text" type="text">
-        <input  type="submit" value="Ok">
-        <input  type="button" name="cancel" value="Отмена">
-    </form>
-</div>`
+    function preloadImages(sources, callback) {
+        /* ваш код */
+
+        sources.forEach(src =>{
 
 
-    function showPrompt(html ,showMessege) {
-        let btnShow = document.querySelector('#show-button')
-        // let prompt_form_container = document.querySelector('#prompt-form-container')
-        btnShow.onclick = function () {
-            document.body.insertAdjacentHTML("beforeend", html)
-            document.querySelector('#prompt-form').text.focus()
-            document.querySelector('#prompt-form').cancel.addEventListener('click',function () {
-                showMessege(null)
-            })
-            document.querySelector('#prompt-form').addEventListener('submit',function (e) {
-                e.preventDefault()
-                if (document.querySelector('#prompt-form').text.value !==''){
-                    showMessege(document.querySelector('#prompt-form').text.value)
+                let img = document.createElement('img');
+
+                img.src = src
+                img.onload = function () {
+
+
+                    console.log(src)
                 }
-            })
-            let form = document.getElementById('prompt-form');
-            let lastElem = form.elements[form.elements.length - 1];
-            let firstElem = form.elements[0];
-            // document.querySelector('#prompt-form').text.onkeydown = function (e) {
-            //     console.log(e.key)
-            //     if (e.key ==='Tab'){
-            //         lastElem.focus();
-            //         return false
-            //     }
-            // }
-            document.querySelector('#prompt-form').cancel.onkeydown = function (e) {
-                console.log(e.key)
-                if (e.key ==='Tab'){
-                     console.log(firstElem)
-                    firstElem.focus()
-                    return false
-                }
-            }
-        }
-    }
-    function showMessege(answer) {
 
-        if (answer === null){
-            alert('вы ввели: null')
-            document.querySelector('#prompt-form-container').remove()
-            return;
-        }
-        alert('вы ввели:'+ answer)
-        document.querySelector('#prompt-form-container').remove()
+
+        })
+
     }
-    showPrompt(html,showMessege)
+
+    // ---------- тест ----------
+
+    let sources = [
+        "https://en.js.cx/images-load/1.jpg",
+        "https://en.js.cx/images-load/2.jpg",
+        "https://en.js.cx/images-load/3.jpg"
+    ];
+
+    // добавляем случайные символы к ссылкам, чтобы избежать кеширования
+    for (let i = 0; i < sources.length; i++) {
+        sources[i] += '?' + Math.random();
+    }
+
+    // для каждого изображения
+    // создадим другое изображение с аналогичным src и проверим, есть ли у нас его ширина
+    function testLoaded() {
+        let widthSum = 0;
+        for (let i = 0; i < sources.length; i++) {
+            let img = document.createElement('img');
+            img.src = sources[i];
+            widthSum += img.width;
+        }
+        alert(widthSum);
+    }
+
+    // каждое изображение в разрешении 100x100, итоговая сумма их ширин должна быть 300
+    preloadImages(sources, testLoaded);
 </script>
 
+</body>
 </html>
