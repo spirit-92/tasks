@@ -13,66 +13,43 @@
 <script>
     let observer = new MutationObserver(mutations => {
         // console.log(mutations)
-        for(let mutation of mutations) {
+        for (let mutation of mutations) {
 
             // проверим новые узлы, есть ли что-то, что надо подсветить?
 
 
-            for(let node of mutation.addedNodes) {
+            for (let node of mutation.addedNodes) {
                 // отслеживаем только узлы-элементы, другие (текстовые) пропускаем
 
                 if (!(node instanceof HTMLElement)) continue;
 
                 // проверить, не является ли вставленный элемент примером кода
                 if (node.matches('pre[class*="language-"]')) {
-                    console.log(node,'!!!')
+                    console.log(node, '!!!')
                     Prism.highlightElement(node);
                 }
 
                 // или, может быть, пример кода есть в его поддереве?
-                for(let elem of node.querySelectorAll('pre[class*="language-"]')) {
-                    console.log(node,'!!222!')
+                for (let elem of node.querySelectorAll('pre[class*="language-"]')) {
+                    console.log(node, '!!222!')
                     Prism.highlightElement(elem);
                 }
-=======
-
-<script type="module">
-    let cashF = {
-        saveFi: function (a, b) {
-            return a + b
-        }
-    }
-    function decorate(f) {
-        let cash = new Map()
-
-        let funk =  function () {
-            let key  = arguments[0]+arguments[1]
-            funk.calling += 1
-            if (cash.has(key)){
-                console.log('CASSHH')
-                return cash.get(key)
 
             }
-            cash.set(key,f.apply(this,arguments))
-            return cash.get(key)
-
         }
+    })
+                let demoElem = document.getElementById('highlight-demo');
 
 
-    });
+    demoElem.innerHTML = `Фрагмент кода ниже:
+  <pre class="language-javascript"><code> let hello = "world!"; </code></pre>
+  <div>Ещё один:</div>
+  <div>
+    <pre class="language-css"><code>.class { margin: 5px; } </code></pre>
+  </div>
+`
 
-    let demoElem = document.getElementById('highlight-demo');
-
-    // динамически вставить содержимое как фрагменты кода
-//     demoElem.innerHTML = `Фрагмент кода ниже:
-//   <pre class="language-javascript"><code> let hello = "world!"; </code></pre>
-//   <div>Ещё один:</div>
-//   <div>
-//     <pre class="language-css"><code>.class { margin: 5px; } </code></pre>
-//   </div>
-// `;
-
-    observer.observe(demoElem, {childList: true, subtree: true});
+    observer.observe(demoElem, {childList: true, subtree: true})
 </script>
 <script>
     let test = `
@@ -89,19 +66,9 @@
 </script>
 </body>
 </html>
-=======
-        funk.calling = 0;
-        return funk
 
-    }
-     cashF.saveFi = decorate(cashF.saveFi)
-    console.log(cashF.saveFi(2,2))
-    console.log(cashF.saveFi(2,2))
-    console.log(cashF.saveFi(2,3))
-    console.log(cashF.saveFi(2,3))
-    console.log(cashF.saveFi.calling,'CALLING')
-</script>
 
-</html>;
+
+
 
 
