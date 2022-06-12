@@ -5,65 +5,32 @@
     <meta charset="utf-8">
     <link href="prism.css" rel="stylesheet" />
 </head>
-
-<div contentEditable id="elem">Отредактируй <b>меня</b>, пожалуйста</div>
-<div id="highlight-demo"></div>
-<script src="prism.js"></script>
+<body>
+<div id="progress"></div>
 
 <script>
-    let observer = new MutationObserver(mutations => {
-        // console.log(mutations)
-        for (let mutation of mutations) {
+    let i = 0;
 
-            // проверим новые узлы, есть ли что-то, что надо подсветить?
+    function count() {
 
+        // сделать часть крупной задачи (*)
+        do {
+            i++;
+            progress.innerHTML = i;
 
-            for (let node of mutation.addedNodes) {
-                // отслеживаем только узлы-элементы, другие (текстовые) пропускаем
-
-                if (!(node instanceof HTMLElement)) continue;
-
-                // проверить, не является ли вставленный элемент примером кода
-                if (node.matches('pre[class*="language-"]')) {
-                    console.log(node, '!!!')
-                    Prism.highlightElement(node);
-                }
-
-                // или, может быть, пример кода есть в его поддереве?
-                for (let elem of node.querySelectorAll('pre[class*="language-"]')) {
-                    console.log(node, '!!222!')
-                    Prism.highlightElement(elem);
-                }
-
-            }
+        } while (i % 100 != 0);
+        console.log(i)
+        if (i < 10000000) {
+            setTimeout(count);
         }
-    })
-                let demoElem = document.getElementById('highlight-demo');
 
+    }
 
-    demoElem.innerHTML = `Фрагмент кода ниже:
-  <pre class="language-javascript"><code> let hello = "world!"; </code></pre>
-  <div>Ещё один:</div>
-  <div>
-    <pre class="language-css"><code>.class { margin: 5px; } </code></pre>
-  </div>
-`
-
-    observer.observe(demoElem, {childList: true, subtree: true})
+    count();
 </script>
-<script>
-    let test = `
- <pre class="language-javascript"><code> let hello = "world!!!"; </code></pre>
-  <div>Ещё один:</div>
-  <div>
-    <pre class="language-css"><code>.class { margin: 5px; } </code></pre>
-  </div>`
-    setTimeout(function () {
-        // demoElem.innerHTML =  test
-        demoElem.insertAdjacentHTML('beforeend',test)
-    },2000)
 
-</script>
+
+
 </body>
 </html>
 
