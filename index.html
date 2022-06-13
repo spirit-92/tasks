@@ -1,41 +1,44 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <link href="prism.css" rel="stylesheet" />
-</head>
-<body>
-<div id="progress"></div>
-
+<!doctype html>
+<script src="https://ru.js.cx/test/libs.js"></script>
 <script>
-    let i = 0;
+    describe("getUsers", function() {
 
-    function count() {
+        it("gets users from GitHub", async function() {
+            let users = await getUsers(['iliakan', 'remy', 'no.such.users']);
+            assert.equal(users[0].login, 'iliakan');
+            assert.equal(users[1].login, 'remy');
+            assert.equal(users[2], null);
+        });
 
-        // сделать часть крупной задачи (*)
-        do {
-            i++;
-            progress.innerHTML = i;
+    });
+</script>
+<script>
 
-        } while (i % 100 != 0);
-        console.log(i)
-        if (i < 10000000) {
-            setTimeout(count);
+    async function getUsers(names) {
+        let jobs = [];
+
+        for(let name of names) {
+            let job = fetch(`https://api.github.com/users/${name}`).then(
+                successResponse => {
+                    if (successResponse.status != 200) {
+                        return null;
+                    } else {
+                        return successResponse.json();
+                    }
+                },
+                failResponse => {
+                    return null;
+                }
+            );
+            jobs.push(job);
         }
 
+        let results = await Promise.all(jobs);
+
+        return results;
     }
 
-    count();
+
 </script>
 
-
-
-</body>
 </html>
-
-
-
-
-
-
